@@ -4,8 +4,8 @@ class Cart {
   late final int? id;
   final String? productId;
   final String? productName;
-  final int? initialPrice;
-  final int? productPrice;
+  final double? initialPrice;
+  final double? productPrice;
   final ValueNotifier<int>? quantity;
   final String? unitTag;
   final String? image;
@@ -24,8 +24,8 @@ class Cart {
       : id = data['id'],
         productId = data['productId'],
         productName = data['productName'],
-        initialPrice = data['initialPrice'],
-        productPrice = data['productPrice'],
+        initialPrice = data['initialPrice'].toDouble(),
+        productPrice = data['productPrice'].toDouble(),
         quantity = ValueNotifier(data['quantity']),
         unitTag = data['unitTag'],
         image = data['image'];

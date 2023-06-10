@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as pbad;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_cart_app/model/item_model.dart';
@@ -6,6 +6,7 @@ import 'package:shopping_cart_app/provider/cart_provider.dart';
 import 'package:shopping_cart_app/database/db_helper.dart';
 import 'package:shopping_cart_app/model/cart_model.dart';
 import 'package:shopping_cart_app/screens/cart_screen.dart';
+import 'package:logger/logger.dart';
 
 class ProductList extends StatefulWidget {
   const ProductList({Key? key}) : super(key: key);
@@ -23,45 +24,42 @@ class _ProductListState extends State<ProductList> {
     Item(
         name: 'Mango',
         unit: 'Doz',
-        price: 30,
+        price: 30.5,
         image: 'assets/images/mango.png'),
     Item(
         name: 'Banana',
         unit: 'Doz',
-        price: 10,
+        price: 10.0,
         image: 'assets/images/banana.png'),
+    Item(name: 'Uvas', unit: 'Kg', price: 8, image: 'assets/images/grapes.png'),
     Item(
-        name: 'Grapes',
+        name: 'Sandia',
         unit: 'Kg',
-        price: 8,
-        image: 'assets/images/grapes.png'),
-    Item(
-        name: 'Water Melon',
-        unit: 'Kg',
-        price: 25,
+        price: 25.0,
         image: 'assets/images/watermelon.png'),
     Item(name: 'Kiwi', unit: 'Pc', price: 40, image: 'assets/images/kiwi.png'),
     Item(
-        name: 'Orange',
+        name: 'Naranja',
         unit: 'Doz',
-        price: 15,
+        price: 15.0,
         image: 'assets/images/orange.png'),
     Item(name: 'Peach', unit: 'Pc', price: 8, image: 'assets/images/peach.png'),
     Item(
-        name: 'Strawberry',
+        name: 'Fresas',
         unit: 'Box',
-        price: 12,
+        price: 12.0,
         image: 'assets/images/strawberry.png'),
     Item(
         name: 'Fruit Basket',
         unit: 'Kg',
-        price: 55,
+        price: 55.0,
         image: 'assets/images/fruitBasket.png'),
   ];
 
   //List<bool> clicked = List.generate(10, (index) => false, growable: true);
   @override
   Widget build(BuildContext context) {
+    final logger = Logger();
     final cart = Provider.of<CartProvider>(context);
     void saveData(int index) {
       dbHelper
@@ -80,18 +78,18 @@ class _ProductListState extends State<ProductList> {
           .then((value) {
         cart.addTotalPrice(products[index].price.toDouble());
         cart.addCounter();
-        print('Product Added to cart');
+        logger.log(Level.info, 'Product Added to cart');
       }).onError((error, stackTrace) {
-        print(error.toString());
+        logger.log(Level.info, error.toString());
       });
     }
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Product List'),
+        title: const Text('Lista de productos'),
         actions: [
-          Badge(
+          pbad.Badge(
             badgeContent: Consumer<CartProvider>(
               builder: (context, value, child) {
                 return Text(
@@ -101,7 +99,7 @@ class _ProductListState extends State<ProductList> {
                 );
               },
             ),
-            position: const BadgePosition(start: 30, bottom: 30),
+            position: const pbad.BadgePosition(start: 30, bottom: 30),
             child: IconButton(
               onPressed: () {
                 Navigator.push(
@@ -148,7 +146,7 @@ class _ProductListState extends State<ProductList> {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             text: TextSpan(
-                                text: 'Name: ',
+                                text: 'Nombre: ',
                                 style: TextStyle(
                                     color: Colors.blueGrey.shade800,
                                     fontSize: 16.0),
@@ -163,7 +161,7 @@ class _ProductListState extends State<ProductList> {
                           RichText(
                             maxLines: 1,
                             text: TextSpan(
-                                text: 'Unit: ',
+                                text: 'Unidades: ',
                                 style: TextStyle(
                                     color: Colors.blueGrey.shade800,
                                     fontSize: 16.0),
@@ -178,7 +176,7 @@ class _ProductListState extends State<ProductList> {
                           RichText(
                             maxLines: 1,
                             text: TextSpan(
-                                text: 'Price: ' r"$",
+                                text: 'Precio: ' r"$",
                                 style: TextStyle(
                                     color: Colors.blueGrey.shade800,
                                     fontSize: 16.0),
@@ -195,11 +193,11 @@ class _ProductListState extends State<ProductList> {
                     ),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.blueGrey.shade900),
+                            backgroundColor: Colors.blueGrey.shade900),
                         onPressed: () {
                           saveData(index);
                         },
-                        child: const Text('Add to Cart')),
+                        child: const Text('Agregar a carrito')),
                   ],
                 ),
               ),

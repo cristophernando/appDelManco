@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shopping_cart_app/provider/cart_provider.dart';
 import 'package:shopping_cart_app/screens/product_list.dart';
 
-void main() {
+void main() { 
   runApp(const MyApp());
 }
 
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       child: Builder(builder: (context) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'App Compras',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),

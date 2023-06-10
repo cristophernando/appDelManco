@@ -1,9 +1,10 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as pbad;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_cart_app/database/db_helper.dart';
 import 'package:shopping_cart_app/model/cart_model.dart';
 import 'package:shopping_cart_app/provider/cart_provider.dart';
+import 'package:logger/logger.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({
@@ -17,11 +18,49 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   DBHelper? dbHelper = DBHelper();
   List<bool> tapped = [];
+  var logger = Logger();
 
   @override
   void initState() {
     super.initState();
     context.read<CartProvider>().getData();
+  }
+
+  void showConfirm(BuildContext context, cart) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: const Text("Finalizar Compra"),
+            content: const Text("¿Esta seguro de realizar la compra?"),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    logger.log(Level.debug, "Click aceptar");
+                    cart.cart.forEach((item) {
+                      logger.log(Level.info, item.id);
+                      dbHelper!.deleteCartItem(item.id!);
+                    });
+                    cart.clearCart();
+                    Navigator.of(ctx).pop();
+                    Navigator.of(ctx).pop();
+                    ScaffoldMessenger.of(ctx).showSnackBar(
+                      const SnackBar(
+                        content: Text('Pago realizado!!!'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  child: const Text("Aceptar")),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                    logger.log(Level.debug, "Click cancelar");
+                  },
+                  child: const Text("Cancelar")),
+            ],
+          );
+        });
   }
 
   @override
@@ -30,9 +69,9 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('My Shopping Cart'),
+        title: const Text('Carrito de Compras'),
         actions: [
-          Badge(
+          pbad.Badge(
             badgeContent: Consumer<CartProvider>(
               builder: (context, value, child) {
                 return Text(
@@ -42,7 +81,7 @@ class _CartScreenState extends State<CartScreen> {
                 );
               },
             ),
-            position: const BadgePosition(start: 30, bottom: 30),
+            position: const pbad.BadgePosition(start: 30, bottom: 30),
             child: IconButton(
               onPressed: () {},
               icon: const Icon(Icons.shopping_cart),
@@ -61,7 +100,7 @@ class _CartScreenState extends State<CartScreen> {
                 if (provider.cart.isEmpty) {
                   return const Center(
                       child: Text(
-                    'Your Cart is Empty',
+                    'Tu carruto está vacio',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
                   ));
@@ -98,7 +137,7 @@ class _CartScreenState extends State<CartScreen> {
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                         text: TextSpan(
-                                            text: 'Name: ',
+                                            text: 'Nombre: ',
                                             style: TextStyle(
                                                 color: Colors.blueGrey.shade800,
                                                 fontSize: 16.0),
@@ -114,7 +153,7 @@ class _CartScreenState extends State<CartScreen> {
                                       RichText(
                                         maxLines: 1,
                                         text: TextSpan(
-                                            text: 'Unit: ',
+                                            text: 'Unidades: ',
                                             style: TextStyle(
                                                 color: Colors.blueGrey.shade800,
                                                 fontSize: 16.0),
@@ -130,7 +169,7 @@ class _CartScreenState extends State<CartScreen> {
                                       RichText(
                                         maxLines: 1,
                                         text: TextSpan(
-                                            text: 'Price: ' r"$",
+                                            text: 'Precio: ' r"$",
                                             style: TextStyle(
                                                 color: Colors.blueGrey.shade800,
                                                 fontSize: 16.0),
@@ -213,7 +252,7 @@ class _CartScreenState extends State<CartScreen> {
           ),
           Consumer<CartProvider>(
             builder: (BuildContext context, value, Widget? child) {
-              final ValueNotifier<int?> totalPrice = ValueNotifier(null);
+              final ValueNotifier<double?> totalPrice = ValueNotifier(null);
               for (var element in value.cart) {
                 totalPrice.value =
                     (element.productPrice! * element.quantity!.value) +
@@ -221,7 +260,7 @@ class _CartScreenState extends State<CartScreen> {
               }
               return Column(
                 children: [
-                  ValueListenableBuilder<int?>(
+                  ValueListenableBuilder<double?>(
                       valueListenable: totalPrice,
                       builder: (context, val, child) {
                         return ReusableWidget(
@@ -235,20 +274,13 @@ class _CartScreenState extends State<CartScreen> {
         ],
       ),
       bottomNavigationBar: InkWell(
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Payment Successful'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        },
+        onTap: () => showConfirm(context, cart),
         child: Container(
           color: Colors.yellow.shade600,
           alignment: Alignment.center,
           height: 50.0,
           child: const Text(
-            'Proceed to Pay',
+            'Proceder al pago',
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
@@ -285,7 +317,9 @@ class PlusMinusButtons extends StatelessWidget {
 
 class ReusableWidget extends StatelessWidget {
   final String title, value;
-  const ReusableWidget({Key? key, required this.title, required this.value});
+  const ReusableWidget(
+      {Key? key, Key? key2, required this.title, required this.value})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -296,11 +330,11 @@ class ReusableWidget extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           Text(
             value.toString(),
-            style: Theme.of(context).textTheme.subtitle2,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
         ],
       ),

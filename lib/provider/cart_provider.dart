@@ -100,4 +100,13 @@ class CartProvider with ChangeNotifier {
     _getPrefsItems();
     return _totalPrice;
   }
+
+  void clearCart() {
+    cart.clear();
+    _counter = 0;
+    _quantity = 1;
+    _totalPrice = 0.0;
+    _setPrefsItems();
+    notifyListeners();
+  }
 }
