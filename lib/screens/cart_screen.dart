@@ -5,6 +5,7 @@ import 'package:shopping_cart_app/database/db_helper.dart';
 import 'package:shopping_cart_app/model/cart_model.dart';
 import 'package:shopping_cart_app/provider/cart_provider.dart';
 import 'package:logger/logger.dart';
+import 'package:shopping_cart_app/screens/confirmacion.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({
@@ -42,8 +43,13 @@ class _CartScreenState extends State<CartScreen> {
                       dbHelper!.deleteCartItem(item.id!);
                     });
                     cart.clearCart();
-                    Navigator.of(ctx).pop();
-                    Navigator.of(ctx).pop();
+                    //Navigator.of(ctx).pop();
+                    //Navigator.of(ctx).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Confirmacion()),
+                    );
                     ScaffoldMessenger.of(ctx).showSnackBar(
                       const SnackBar(
                         content: Text('Pago realizado!!!'),
@@ -100,7 +106,7 @@ class _CartScreenState extends State<CartScreen> {
                 if (provider.cart.isEmpty) {
                   return const Center(
                       child: Text(
-                    'Tu carruto está vacio',
+                    'Tu carrito está vacio',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
                   ));

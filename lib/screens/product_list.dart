@@ -20,40 +20,90 @@ class _ProductListState extends State<ProductList> {
 
   List<Item> products = [
     Item(
-        name: 'Apple', unit: 'Kg', price: 20, image: 'assets/images/apple.png'),
+        name: 'Don Café',
+        unit: '50 g',
+        price: 1.24,
+        image: 'assets/images/doncafe.jpg'),
     Item(
-        name: 'Mango',
-        unit: 'Doz',
-        price: 30.5,
-        image: 'assets/images/mango.png'),
+        name: 'Azucar',
+        unit: '1 lb',
+        price: 0.48,
+        image: 'assets/images/azucar.jpg'),
     Item(
-        name: 'Banana',
-        unit: 'Doz',
-        price: 10.0,
-        image: 'assets/images/banana.png'),
-    Item(name: 'Uvas', unit: 'Kg', price: 8, image: 'assets/images/grapes.png'),
+        name: 'Leche',
+        unit: '900 ml',
+        price: 0.90,
+        image: 'assets/images/leche.jpg'),
     Item(
-        name: 'Sandia',
-        unit: 'Kg',
-        price: 25.0,
-        image: 'assets/images/watermelon.png'),
-    Item(name: 'Kiwi', unit: 'Pc', price: 40, image: 'assets/images/kiwi.png'),
+        name: 'Arroz',
+        unit: '1 lb',
+        price: 0.60,
+        image: 'assets/images/arroz.webp'),
     Item(
-        name: 'Naranja',
-        unit: 'Doz',
-        price: 15.0,
-        image: 'assets/images/orange.png'),
-    Item(name: 'Peach', unit: 'Pc', price: 8, image: 'assets/images/peach.png'),
+        name: 'Aceite Sabroson',
+        unit: '900 ml',
+        price: 2.59,
+        image: 'assets/images/aceite.webp'),
     Item(
-        name: 'Fresas',
-        unit: 'Box',
-        price: 12.0,
-        image: 'assets/images/strawberry.png'),
+        name: 'Dasani',
+        unit: '600 ml',
+        price: 0.50,
+        image: 'assets/images/agua.jpg'),
     Item(
-        name: 'Fruit Basket',
-        unit: 'Kg',
-        price: 55.0,
-        image: 'assets/images/fruitBasket.png'),
+        name: 'Coca Cola',
+        unit: '350 ml',
+        price: 0.50,
+        image: 'assets/images/coca350.png'),
+    Item(
+        name: 'Coca Cola',
+        unit: '1 lt',
+        price: 1.10,
+        image: 'assets/images/coca1.jpg'),
+    Item(
+        name: 'Pilsener 6 pack',
+        unit: '355 ml',
+        price: 5.35,
+        image: 'assets/images/pilsener.jpg'),
+    Item(
+        name: 'Club 6 pack',
+        unit: '355 ml',
+        price: 6.29,
+        image: 'assets/images/club.png'),
+    Item(
+        name: 'Siembra 6 pack',
+        unit: '355 ml',
+        price: 5.19,
+        image: 'assets/images/siembra.png'),
+    Item(
+        name: 'Biela 6 pack',
+        unit: '355 ml',
+        price: 4.99,
+        image: 'assets/images/biela6p.webp'),
+    Item(
+        name: 'Vino Valle de Mar',
+        unit: '750 ml',
+        price: 4.99,
+        image: 'assets/images/vino.webp'),
+    Item(
+        name: 'Wisky Old Times',
+        unit: '745 ml',
+        price: 10.99,
+        image: 'assets/images/wisky.jpg'),
+    Item(
+        name: 'Biela 12 pack',
+        unit: '355 ml',
+        price: 10,
+        image: 'assets/images/biela12p.png'),
+    Item(
+        name: 'Combo Wisky, hielo y agua mineral',
+        unit: '750 ml',
+        price: 12.99,
+        image: 'assets/images/combo.webp'),
+    Item(
+        name: 'Atun Real',
+        unit: '180 gr',
+        price: 0.80,
+        image: 'assets/images/atun.jpg'),
   ];
 
   //List<bool> clicked = List.generate(10, (index) => false, growable: true);
@@ -130,12 +180,12 @@ class _ProductListState extends State<ProductList> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Image(
-                      height: 80,
-                      width: 80,
+                      height: 200,
+                      width: 200,
                       image: AssetImage(products[index].image.toString()),
                     ),
                     SizedBox(
-                      width: 130,
+                      width: 200,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -144,7 +194,7 @@ class _ProductListState extends State<ProductList> {
                           ),
                           RichText(
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                            maxLines: 2,
                             text: TextSpan(
                                 text: 'Nombre: ',
                                 style: TextStyle(
@@ -159,7 +209,7 @@ class _ProductListState extends State<ProductList> {
                                 ]),
                           ),
                           RichText(
-                            maxLines: 1,
+                            maxLines: 2,
                             text: TextSpan(
                                 text: 'Unidades: ',
                                 style: TextStyle(
@@ -174,7 +224,7 @@ class _ProductListState extends State<ProductList> {
                                 ]),
                           ),
                           RichText(
-                            maxLines: 1,
+                            maxLines: 2,
                             text: TextSpan(
                                 text: 'Precio: ' r"$",
                                 style: TextStyle(
